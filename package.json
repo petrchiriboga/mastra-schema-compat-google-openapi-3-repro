@@ -1,0 +1,18 @@
+{
+  "name": "mastra-schema-compat-google-openapi-3-repro",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "repro": "tsx repro.ts"
+  },
+  "dependencies": {
+    "@mastra/schema-compat": "1.2.10",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.5",
+    "tsx": "4.19.2",
+    "typescript": "5.7.3"
+  }
+}
