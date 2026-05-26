@@ -14,23 +14,17 @@ This repro covers both: a static script that proves what the layer emits, and a 
 
 ## Run
 
-### Static (no API key required)
-
 ```bash
 pnpm install
-pnpm repro
+pnpm repro                                                       # static only
+GOOGLE_GENERATIVE_AI_API_KEY=... pnpm repro                       # static + live REST probe
+PROBE_MODEL=gemini-2.5-pro GOOGLE_GENERATIVE_AI_API_KEY=... pnpm repro   # default is gemini-2.5-flash
 ```
 
-Instantiates `GoogleSchemaCompatLayer` against `gemini-2.5-pro` and dumps `processToJSONSchema` + `processToAISDKSchema.jsonSchema` output for six representative Zod shapes (literal, union, discriminatedUnion, nullable, record, plain object), flagging every key Gemini Live would reject.
+One script, two parts:
 
-### Live REST probe (requires `GOOGLE_GENERATIVE_AI_API_KEY`)
-
-```bash
-GOOGLE_GENERATIVE_AI_API_KEY=... pnpm repro:rest
-PROBE_MODEL=gemini-2.5-pro GOOGLE_GENERATIVE_AI_API_KEY=... pnpm repro:rest   # default is gemini-2.5-flash
-```
-
-Runs four schema cases through actual `generateText` against the chosen Gemini model and reports PASS/FAIL based on whether the model's tool args validate against the original Zod schema. Cost: ~4 short tool-call generations.
+1. **STATIC** — always runs, no API key needed. Dumps `processToJSONSchema` + `processToAISDKSchema.jsonSchema` output for seven representative Zod shapes (literal, union, discriminatedUnion, union-of-objects control, nullable, record, plain object) and flags every key Gemini Live would reject.
+2. **LIVE REST** — runs only if `GOOGLE_GENERATIVE_AI_API_KEY` (or `GOOGLE_API_KEY`) is set. For each case that has a live config, calls Gemini REST through `@ai-sdk/google` with the schema as a tool's input and reports PASS/FAIL based on whether the model's tool args validate against the original Zod schema. Cost: ~4 short tool-call generations.
 
 ## Empirical findings
 

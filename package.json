@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "repro": "tsx repro.ts",
-    "repro:rest": "tsx repro-rest.ts"
+    "repro": "tsx repro.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
